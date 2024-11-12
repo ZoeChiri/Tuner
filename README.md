@@ -21,11 +21,7 @@ matplotlib (for future UI enhancements)
 This project is open-source and available under the MIT License.
 
 ## Work in Progress
-This is how I would like the UI to look with the waves moving accordingly to the instrument:
+I updated the UI.
 
-<img width="543" alt="PNG image" src="https://github.com/user-attachments/assets/ce97055f-77b0-40a0-a1ca-654cf15720ee">
+<img width="441" alt="Screenshot 2024-11-12 at 2 28 46 PM" src="https://github.com/user-attachments/assets/477d1815-69ec-4e2e-9867-9beb52c8bda4">
 
-
-How it looks now:
-
-<img width="303" alt="PNG image" src="https://github.com/user-attachments/assets/afd1005c-323a-4a31-a153-4f293fa7f8f2">
