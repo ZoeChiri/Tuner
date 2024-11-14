@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pitch Detector</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Pitch Detector</h1>
+        <div id="note-display" class="note-display">A#</div>
+        <button id="start-btn" class="control-btn">Start</button>
+        <button id="stop-btn" class="control-btn">Stop</button>
+    </div>
+
+    <!-- Wave container -->
+    <div class="wave-container">
+        <svg class="wave wave1" viewBox="0 0 1200 120" preserveAspectRatio="none">
+            <path id="wave1-path" d="M0,70 C150,65 300,75 450,70 C600,65 750,75 900,70 C1050,65 1200,75 1350,70 V150 H0 Z"></path>
+        </svg>
+        <svg class="wave wave2" viewBox="0 0 1200 120" preserveAspectRatio="none">
+            <path id="wave2-path" d="M0,80 C200,70 400,90 600,80 C800,70 1000,90 1200,80 V150 H0 Z"></path>
+        </svg>
+    </div>
+    
+    
+
+
+    <script>
+        const socket = io();
+
+        // Control buttons
+        document.getElementById("start-btn").onclick = () => {
+            socket.emit("start_tuner");
+        };
+
+        document.getElementById("stop-btn").onclick = () => {
+            socket.emit("stop_tuner");
+        };
+
+        // Handle note detection and animate the waves
+        socket.on("note_detected", function(data) {
+            const amplitude = data.amplitude; // Amplitude data
+            const frequency = data.frequency; // Frequency of the detected note
+
+            // Adjust wave height based on amplitude
+            const scale = 1 + Math.min(amplitude * 5, 1); // Adjust the multiplier as needed
+
+    
+            const wave1 = document.getElementById("wave1-path");
+            const wave2 = document.getElementById("wave2-path");
+
+            // Animate the waves based on frequency and amplitude
+            updateWave(wave1, frequency, scale);     
+            updateWave(wave2, frequency / 1.5, scale); 
+      
+            document.getElementById("note-display").innerText = data.note;
+        });
+
+        // Function to animate the waves
+        function updateWave(wave, frequency, scale) {
+            const amplitudeFactor = 20 * scale;  
+            let pathData = "M0,60 ";
+
+            for (let x = 0; x <= 1200; x += 10) {
+                const y = 60 + amplitudeFactor * Math.sin(x * frequency / 1200 * Math.PI * 2);
+                pathData += `C${x + 50},${y + 30} ${x + 100},${y - 30} ${x + 150},${y}`;
+            }
+
+            wave.setAttribute("d", pathData + " V120 H0 Z");
+        }
+    </script>
+</body>
+</html>
