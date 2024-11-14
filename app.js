@@ -23,8 +23,8 @@ socket.on('waveform_data', function(data) {
     waveformCtx.stroke();
 });
 socket.on('note_detected', function(data) {
-    const pitch = data.note; // Use the detected pitch or calculate a "speed" from it
-    const speed = Math.max(2, 10 - (pitch / 100)); // Adjust speed calculation as needed
+    const pitch = data.note; // Use the detected pitch
+    const speed = Math.max(2, 10 - (pitch / 100)); // Adjust speeeed
 
     document.querySelectorAll('.wave').forEach(wave => {
         wave.style.animationDuration = `${speed}s`;
